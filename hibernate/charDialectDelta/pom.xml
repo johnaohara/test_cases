@@ -1,0 +1,245 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jboss.orm.test.dialect</groupId>
+	<artifactId>HibernateDialectCharTest</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Hibernate_char_testcase</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<database.name>chartest</database.name>
+		<database.host>localhost</database.host>
+
+		<!-- postgres settings -->
+		<postgres.user>[POSTGRES_USER_NAME]</postgres.user>
+		<postgres.password>[POSTGRES_PASSWORD]</postgres.password>
+
+		<postgres.port>5432</postgres.port>
+		<postgres.driver>org.postgresql.Driver</postgres.driver>
+		<postgres.dialect>org.hibernate.dialect.PostgreSQLDialect</postgres.dialect>
+
+		<!-- mysql settings -->
+		<mysql.user>[MYSQL_USER_NAME]</mysql.user>
+		<mysql.password>[MYSQL_PASSWORD]</mysql.password>
+
+		<mysql.port>3306</mysql.port>
+		<mysql.driver>com.mysql.jdbc.Driver</mysql.driver>
+		<mysql.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</mysql.dialect>
+
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.1.3.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.20</version>
+		</dependency>
+
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901.jdbc4</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<version>1.5</version>
+
+				<dependencies>
+					<dependency>
+						<groupId>postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>9.1-901.jdbc4</version>
+					</dependency>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>5.1.20</version>
+					</dependency>
+
+				</dependencies>
+
+				<!-- common configuration shared by all executions -->
+				<configuration>
+					<settingsKey>sensibleKey</settingsKey>
+					<skip>${maven.test.skip}</skip>
+				</configuration>
+
+				<executions>
+					<!-- create and populate table used in test on postgres and mysql -->
+					<execution>
+						<id>create-schema-postgres</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<url>jdbc:postgresql://${database.host}:${postgres.port}/${database.name}</url>
+							<driver>${postgres.driver}</driver>
+							<username>${postgres.user}</username>
+							<password>${postgres.password}</password>
+							<autocommit>true</autocommit>
+							<srcFiles>
+								<srcFile>src/test/sql/dropTable.sql</srcFile>
+								<srcFile>src/test/sql/testSchema.postgres.sql</srcFile>
+								<srcFile>src/test/sql/testData.sql</srcFile>
+							</srcFiles>
+						</configuration>
+					</execution>
+					<execution>
+						<id>create-schema-mysql</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<url>jdbc:mysql://${database.host}:${mysql.port}/${database.name}</url>
+							<driver>${mysql.driver}</driver>
+							<username>${mysql.user}</username>
+							<password>${mysql.password}</password>
+							<autocommit>true</autocommit>
+							<srcFiles>
+								<srcFile>src/test/sql/dropTable.sql</srcFile>
+								<srcFile>src/test/sql/testSchema.mysql.sql</srcFile>
+								<srcFile>src/test/sql/testData.sql</srcFile>
+							</srcFiles>
+						</configuration>
+					</execution>
+
+
+					<!-- drop db after test -->
+					<execution>
+						<id>drop-db-after-test-postgres</id>
+						<phase>test</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<driver>${postgres.driver}</driver>
+							<url>jdbc:postgresql://${database.host}:${postgres.port}/template1</url>
+							<username>${postgres.user}</username>
+							<password>${postgres.password}</password>
+							<autocommit>true</autocommit>
+							<srcFiles>
+								<srcFile>src/test/sql/dropTable.sql</srcFile>
+							</srcFiles>
+						</configuration>
+					</execution>
+					<execution>
+						<id>drop-db-after-test-mysql</id>
+						<phase>test</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<url>jdbc:mysql://${database.host}:${mysql.port}/${database.name}</url>
+							<driver>${mysql.driver}</driver>
+							<username>${mysql.user}</username>
+							<password>${mysql.password}</password>
+							<autocommit>true</autocommit>
+							<srcFiles>
+								<srcFile>src/test/sql/dropTable.sql</srcFile>
+							</srcFiles>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>sql-maven-plugin</artifactId>
+										<versionRange>[1.5,)</versionRange>
+										<goals>
+											<goal>execute</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											hibernate-maven-plugin
+										</artifactId>
+										<versionRange>[3.0,)</versionRange>
+										<goals>
+											<goal>hbm2cfgxml</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											hibernate3-maven-plugin
+										</artifactId>
+										<versionRange>
+											[3.0,)
+										</versionRange>
+										<goals>
+											<goal>hbm2cfgxml</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
