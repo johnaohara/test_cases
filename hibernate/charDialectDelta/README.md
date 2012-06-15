@@ -16,11 +16,20 @@ How to run test case
 --------------------
 
 1) Create a mysql database called chartest
+
 2) Grant a user all privaledges on chartest datbase
+
 3) update ./src/main/resources/hibernate.cfg.mysql.xml with mysql username and password
+
 4) Create a postgres database called chartest
+
 5) Grant a user all privaledges on chartest datbase
+
 6) update ./src/main/resources/hibernate.cfg.postgres.xml with postgres username and password
+
 7) update ./pom.xml set properties postgres.user and postgres.password with postgres username and password
+
 8) update ./pom.xml set properties mysql.user and mysql.password with mysql username and password
+
 9) execute 'mvn test'
+
