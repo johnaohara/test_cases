@@ -6,7 +6,8 @@ orm.xml with cacheable="true" attribute are not cached in the second level cache
 
 Entities that are annotated @Cacheable(true) are cached correctly
  
-This test case test the following 4 scenarios;
+This test case test the following 4 scenarios
+
 1. Entity is annotated with @Cacheable(true)
 2. Entity is defined as cacheable in orm.xml
 3. Entity is defined as cacheable with hibernate.ejb.classcache in persistence.xml
@@ -15,7 +16,9 @@ This test case test the following 4 scenarios;
 Methodology
 ===========
 
-For each test;
+For each test
+-------------
+
 1. A new customer is created and persisted through JPA.
 2. A JDBC call is made to update CUST_CREDIT value directly to database by picking a connection from connection pool and executing a SQL statement
 3. The customer entity is retrieved through JPA by finding on PK 
@@ -33,4 +36,4 @@ How to Run Testcase
 ===================
 
 	Startup a standalone instance of AS7.1.2/EAP6.0 with standalone-full.xml configuration
-	run "mvn clean test"
+	$ mvn clean test
