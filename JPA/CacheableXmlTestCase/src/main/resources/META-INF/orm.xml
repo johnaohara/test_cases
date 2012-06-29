@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm">
+
+	<entity class="org.jboss.test.jpa.CacheableXmlTestCase.model.CustomerXml" cacheable="true"/>
+
+	<entity class="org.jboss.test.jpa.CacheableXmlTestCase.model.CustomerAnnotated"/>
+
+	<entity class="org.jboss.test.jpa.CacheableXmlTestCase.model.CustomerHibernateCached"/>
+
+	<entity class="org.jboss.test.jpa.CacheableXmlTestCase.model.CustomerNotCached"/>
+	
+	
+</entity-mappings>
