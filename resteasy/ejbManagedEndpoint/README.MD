@@ -1,6 +1,6 @@
 ## Resteasy ejb managed rest endpoint testcase
 
-###To run
+### To run
 
 If not already set, define JBOSS_HOME env variable
 
@@ -10,7 +10,7 @@ If not already set, define JBOSS_HOME env variable
  
  `$ mvn clean test`
  
-###Expected Result
+### Expected Result
 
 org.jboss.perf.client.EndpointTest ; fail
 
