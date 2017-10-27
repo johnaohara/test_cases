@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jboss.performance</groupId>
+    <artifactId>test-jaxrs-valid</artifactId>
+    <version>0.1_SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>JBoss Performance Jax-Rs validation test</name>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <skip.compile>false</skip.compile>
+        <skip.enforcer>true</skip.enforcer>
+    </properties>
+
+    <modules>
+        <module>common</module>
+        <module>webApp</module>
+        <module>client</module>
+    </modules>
+
+    <build>
+
+        <plugins>
+            <!-- Compiler -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <skipMain>${skip.compile}</skipMain>
+                    <skip>${skip.compile}</skip>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <trimStackTrace>false</trimStackTrace>
+                    <!-- Modules ignores Class-Path -->
+                    <useManifestOnlyJar>false</useManifestOnlyJar>
+                    <printSummary>true</printSummary>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <forkMode>always</forkMode>
+                </configuration>
+            </plugin>
+
+            <!-- JAR -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.jboss.modules.Main</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Jar-Version>${project.version}</Jar-Version>
+                            <Jar-Name>${project.artifactId}</Jar-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Source -->
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <!-- Javadoc -->
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <doclet>net.gleamynode.apiviz.APIviz</doclet>
+                    <docletArtifact>
+                        <groupId>org.jboss.apiviz</groupId>
+                        <artifactId>apiviz</artifactId>
+                        <version>1.3.2.GA</version>
+                    </docletArtifact>
+                    <excludePackageNames>__redirected</excludePackageNames>
+                    <excludePackageNames>org.jboss.modules._private</excludePackageNames>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <!-- Enforcer -->
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <configuration>
+                    <skip>${skip.enforcer}</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+
+        
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-impl-base</artifactId>
+            <version>1.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.17.Final-SNAPSHOT</version>
+        </dependency>
+
+        
+
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-7.0</artifactId>
+            <version>1.0.3.Final</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
