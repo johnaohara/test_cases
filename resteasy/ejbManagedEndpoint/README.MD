@@ -12,6 +12,6 @@ If not already set, define JBOSS_HOME env variable
  
 ### Expected Result
 
-org.jboss.perf.client.EndpointTest ; fail
+org.jboss.perf.client.ManagedEndpointTest ; fail
 
 org.jboss.perf.client.NonManagedEndpointTest ; pass
